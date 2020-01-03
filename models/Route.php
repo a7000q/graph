@@ -30,7 +30,13 @@ class Route
     }
 
     public function getShortRoute(){
-        $q = new Queue();   
+        if ($this->_start->id == $this->_end->id)
+            return [
+                'sum' => 0,
+                'path' => [$this->_start]
+            ];
+
+        $q = new Queue();
         $q->push($this->_start);
 
         /** @var Points $item */
@@ -115,7 +121,7 @@ class Route
             return;
 
         foreach ($this->_edgesArray[$current_node] as $node => $value){
-            if (!$this->used[$node]){
+            if (isset($this->used[$node]) && !$this->used[$node]){
                 $new_sum = $this->sum[$current_node] + $value;
 
                 if ($new_sum < $this->sum[$node]){
